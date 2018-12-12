@@ -1,0 +1,67 @@
+{
+    "Venice-2": {
+        "width":1920,
+        "height":1080,
+        "fps":30
+    },
+    
+    "KITTI-17": {
+        "width":1224,
+        "height":370,
+        "fps":10
+    },
+    
+    "KITTI-13": {
+        "width":1242,
+        "height":375,
+        "fps":10
+    },
+    
+    "ADL-Rundle-8": {
+        "width":1920,
+        "height":1080,
+        "fps":30
+    },
+    
+    "ADL-Rundle-6": {
+        "width":1920,
+        "height":1080,
+        "fps":30
+    },
+    
+    "ETH-Pedcross2": {
+        "width":640,
+        "height":480,
+        "fps":14
+    },
+    
+    "ETH-Sunnyday": {
+        "width":640,
+        "height":480,
+        "fps":14
+    },
+    
+    "ETH-Bahnhof": {
+        "width":640,
+        "height":480,
+        "fps":14
+    },
+    
+    "PETS09-S2L1": {
+        "width":768,
+        "height":576,
+        "fps":7
+    },
+    
+    "TUD-Campus": {
+        "width":640,
+        "height":480,
+        "fps":25
+    },
+    
+    "TUD-Stadtmitte": {
+        "width":640,
+        "height":480,
+        "fps":25
+    }
+}

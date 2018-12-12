@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import print_function
 
-from numba import jit  # python compiler - makes python code run fast! (gotta go fast)
+from numba import jit  # python compiler - makes pyhton code run fasst! (gotta go fast)
 import os.path
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,13 +29,13 @@ from sklearn.utils.linear_assignment_ import \
     linear_assignment  # Solve the unique lowest-cost assignment problem using the Hungarian algorithm
 import time
 import argparse
-from filterpy.kalman import KalmanFilter  # Extended KF (EKF) / unscented KF / Ensemble KF (EnKF) / Particle Filter
+from filterpy.kalman import KalmanFilter  # filterpy make this the Extended KF (EKF) / unscented KF / Ensemble KF (EnKF)
 
 
 @jit
 def iou(bb_test: object, bb_gt: object) -> object:
     """
-    Computes IUO between two bounding boxes in the form [x1,y1,x2,y2]
+    Computes IUO between two bboxes in the form [x1,y1,x2,y2]
     """
     xx1 = np.maximum(bb_test[0], bb_gt[0])
     yy1 = np.maximum(bb_test[1], bb_gt[1])
@@ -79,7 +79,7 @@ def convert_x_to_bbox(x, score=None):
 
 class KalmanBoxTracker(object):
     """
-    This class represents the internal state of individual tracked objects observed as a bounding box.
+    This class represents the internel state of individual tracked objects observed as bbox.
     """
     count = 0
 
@@ -96,12 +96,12 @@ class KalmanBoxTracker(object):
              [0, 0, 0, 1, 0, 0, 0],
              [0, 0, 0, 0, 1, 0, 0],
              [0, 0, 0, 0, 0, 1, 0],
-             [0, 0, 0, 0, 0, 0, 1]])  # state transition matrix - this changes?
+             [0, 0, 0, 0, 0, 0, 1]])  # state transition matrix
         self.kf.H = np.array(
             [[1, 0, 0, 0, 0, 0, 0],
              [0, 1, 0, 0, 0, 0, 0],
              [0, 0, 1, 0, 0, 0, 0],
-             [0, 0, 0, 1, 0, 0, 0]])  # measurement function - this stays the same
+             [0, 0, 0, 1, 0, 0, 0]])  # measurement function
 
         self.kf.R[2:, 2:] *= 10.  # measurement uncertainty / noise
         self.kf.P[4:, 4:] *= 1000.  # give high uncertainty to the unobservable initial velocities (covariance matrix)
@@ -158,14 +158,13 @@ def associate_detections_to_trackers(detections, tracked_objects, iou_threshold=
     """
     if len(tracked_objects) == 0:
         return np.empty((0, 2), dtype=int), np.arange(len(detections)), np.empty((0, 5), dtype=int)
+    iou_matrix = np.zeros((len(detections), len(tracked_objects)), dtype=np.float32)  # type: ndarray
 
-    # compute the iou matrix between all detections and tracks
-    iou_matrix = np.zeros((len(detections), len(tracked_objects)), dtype=np.float32)
     for d_index, det in enumerate(detections):
         for t, trk in enumerate(tracked_objects):
             iou_matrix[d_index, t] = iou(det, trk)
 
-    matched_indices = linear_assignment(-iou_matrix)  # Hungarian algorithm takes place here
+    matched_indices = linear_assignment(-iou_matrix)  # type: object
 
     unmatched_detections = []
     for d_index, det in enumerate(detections):
@@ -185,7 +184,6 @@ def associate_detections_to_trackers(detections, tracked_objects, iou_threshold=
             unmatched_trackers.append(m[1])
         else:
             matches.append(m.reshape(1, 2))
-
     if len(matches) == 0:
         matches = np.empty((0, 2), dtype=int)
     else:
@@ -194,7 +192,7 @@ def associate_detections_to_trackers(detections, tracked_objects, iou_threshold=
     return matches, np.array(unmatched_detections), np.array(unmatched_trackers)
 
 
-class Sort(object):  # main class
+class Sort(object):  # main class - TODO start here tomorrow for interpreting the code
     def __init__(self, max_age=1, min_hits=3):
 
         """

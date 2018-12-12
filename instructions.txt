@@ -1,0 +1,6 @@
+Evaluating performance:
+
+to test, run the following command:
+
+    python -m motmetrics.apps.eval_motchallenge path_to_ground_truth/ path_to_results/
+
